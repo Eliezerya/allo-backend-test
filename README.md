@@ -156,4 +156,21 @@ Spread Factor: 0.00765
 
 This factor is applied to calculate USD_BuySpread_IDR in the latest IDR rates.
 
+## Architectural Rationale
+
+1. Strategy Pattern
+Strategy Pattern digunakan untuk menangani tiga resource berbeda (latest_idr_rates, historical_idr_usd, supported_currencies) tanpa menggunakan if/else atau switch.
+- Manfaat: Mudah menambah resource baru, maintainable,dan tidak jorok.
+- Cara kerjanya:Controller hanya memanggil map (resourceType -> IDRDataFetcher) dan strategi yang sesuai dijalankan.
+
+2. Client Factory (WebClientFactoryBean)
+WebClient dibuat menggunakan FactoryBean agar:
+- URL eksternal dan konfigurasi lain bisa di-externalize via @Value/@ConfigurationProperties.
+- Konfigurasi awal (timeout, header, dll) diterapkan sekali.
+- Lebih fleksibel daripada @Bean biasa.
+
+3. Startup Data Runner
+Data fetch untuk semua resource dijalankan saat startup menggunakan ApplicationRunner:
+- Alasan: Memastikan data di-load satu kali dan immutable sebelum API menerima request.
+- Keuntungan: Thread-safe, tidak ada call berulang ke API eksternal di setiap request.
 
