@@ -26,12 +26,12 @@ public class ConversionController {
 
 
     @GetMapping(value = "/{resourceType}")
-    public UnifiedResponseDTO getConversion(@PathVariable (value = "resourceType") String resourceType){
+    public Object getConversion(@PathVariable (value = "resourceType") String resourceType){
         IDRDataFetcher strategy = fetcherStrategies.get(resourceType);
         if (strategy == null){
             throw new IllegalArgumentException("Unknown resourceType: " + resourceType);
         }
         Object response = dataStore.get(resourceType);
-        return new UnifiedResponseDTO(resourceType, response);
+        return response;
     }
 }

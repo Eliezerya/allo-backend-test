@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.validation.ObjectError;
 
 import java.util.Map;
 
@@ -42,10 +43,9 @@ public class ConversionControllerTest {
         CurrenciesDTO currenciesDTO = new CurrenciesDTO(currenciesMap);
         when(dataStore.get("supported_currencies")).thenReturn(currenciesDTO);
 
-        UnifiedResponseDTO response = controller.getConversion("supported_currencies");
+        Object response = controller.getConversion("supported_currencies");
 
-        assertEquals("supported_currencies", response.resourceType());
-        assertEquals(currenciesDTO, response.data());
+        assertEquals(currenciesDTO, response);
     }
 
 
